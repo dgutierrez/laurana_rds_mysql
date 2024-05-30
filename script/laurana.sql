@@ -1,3 +1,9 @@
+drop database laurana;
+
+create database laurana;
+
+use laurana;
+
 CREATE TABLE `Empresa` (
   `IdEmpresa` varchar(36) PRIMARY KEY,
   `NomeEmpresa` varchar(100) NOT NULL,
@@ -16,11 +22,28 @@ CREATE TABLE `Usuario` (
   `DataCadastro` datetime NOT NULL
 );
 
+CREATE TABLE `ConfiguracoesUsuario` (
+  `IdUsuario` varchar(36) PRIMARY KEY,
+  `OpenAiToken` varchar(70)
+);
+
 CREATE TABLE `Assistente` (
   `IdAssistente` varchar(36) PRIMARY KEY,
+  `IdUsuarioCriacao` varchar(36) NOT NULL,
+  `IdEmpresaCriacao` varchar(36) NOT NULL,
   `NomeAssistente` varchar(20) NOT NULL,
+  `ImagemAssistente` blob,
   `ContextoAssistente` text NOT NULL,
-  `AtivoAssistente` bool NOT NULL
+  `DataCadastro` datetime NOT NULL,
+  `IdEscopoAssistente` integer NOT NULL,
+  `AtivoAssistente` bool NOT NULL,
+  `IdUsuarioAlteracao` varchar(36),
+  `DataAlteracao` datetime
+);
+
+CREATE TABLE `EscopoAssistente` (
+  `IdEscopoAssistente` integer PRIMARY KEY,
+  `EscopoAssistente` varchar(20) NOT NULL
 );
 
 CREATE TABLE `Chat` (
@@ -73,16 +96,23 @@ CREATE TABLE `ChatDocumento` (
   PRIMARY KEY (`IdChat`, `IdDocumento`)
 );
 
-CREATE TABLE `Bucket` (
-  `IdEmpresa` varchar(36),
-  `IdUsuario` varchar(36)
-);
-
-CREATE TABLE `PastaBucket` (
-  `NomePasta` varchar(20)
+CREATE TABLE `ModeloDocumentoSaida` (
+  `IdModelo` varchar(36) PRIMARY KEY,
+  `IdUsuario` varchar(36) NOT NULL,
+  `TextoModelo` text NOT NULL
 );
 
 ALTER TABLE `Usuario` ADD FOREIGN KEY (`IdEmpresa`) REFERENCES `Empresa` (`IdEmpresa`);
+
+ALTER TABLE `ConfiguracoesUsuario` ADD FOREIGN KEY (`IdUsuario`) REFERENCES `Usuario` (`IdUsuario`);
+
+ALTER TABLE `Assistente` ADD FOREIGN KEY (`IdUsuarioCriacao`) REFERENCES `Usuario` (`IdUsuario`);
+
+ALTER TABLE `Assistente` ADD FOREIGN KEY (`IdUsuarioAlteracao`) REFERENCES `Usuario` (`IdUsuario`);
+
+ALTER TABLE `Assistente` ADD FOREIGN KEY (`IdEmpresaCriacao`) REFERENCES `Empresa` (`IdEmpresa`);
+
+ALTER TABLE `EscopoAssistente` ADD FOREIGN KEY (`IdEscopoAssistente`) REFERENCES `Assistente` (`IdEscopoAssistente`);
 
 ALTER TABLE `Chat` ADD FOREIGN KEY (`IdAssistente`) REFERENCES `Assistente` (`IdAssistente`);
 
@@ -90,7 +120,7 @@ ALTER TABLE `Chat` ADD FOREIGN KEY (`IdUsuario`) REFERENCES `Usuario` (`IdUsuari
 
 ALTER TABLE `Mensagem` ADD FOREIGN KEY (`IdChat`) REFERENCES `Chat` (`IdChat`);
 
-ALTER TABLE `TipoMensagem` ADD FOREIGN KEY (`IdTipoMensagem`) REFERENCES `Mensagem` (`IdTipoMensagem`);
+ALTER TABLE `Mensagem` ADD FOREIGN KEY (`IdTipoMensagem`) REFERENCES `TipoMensagem` (`IdTipoMensagem`);
 
 ALTER TABLE `Documento` ADD FOREIGN KEY (`IdUsuario`) REFERENCES `Usuario` (`IdUsuario`);
 
@@ -101,3 +131,6 @@ ALTER TABLE `RequisicaoOpenAi` ADD FOREIGN KEY (`IdMensagem`) REFERENCES `Mensag
 ALTER TABLE `ChatDocumento` ADD FOREIGN KEY (`IdChat`) REFERENCES `Chat` (`IdChat`);
 
 ALTER TABLE `ChatDocumento` ADD FOREIGN KEY (`IdDocumento`) REFERENCES `Documento` (`IdDocumento`);
+
+ALTER TABLE `ModeloDocumentoSaida` ADD FOREIGN KEY (`IdUsuario`) REFERENCES `Usuario` (`IdUsuario`);
+
