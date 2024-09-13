@@ -192,7 +192,7 @@ CREATE TABLE `StatusBaseConhecimentoDocumento` (
 
 CREATE TABLE `Notificacao` (
   `IdNotificacao` integer PRIMARY KEY,
-  `IdUsuario` varcgar(36) NOT NULL,
+  `IdUsuario` varchar(36) NOT NULL,
   `Mensagem` varchar(50) NOT NULL,
   `DataCriacaoNotificacao` datetime NOT NULL,
   `DataEntregaNotificacao` datetime,
