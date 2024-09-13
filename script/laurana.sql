@@ -181,12 +181,22 @@ CREATE TABLE `BaseConhecimentoDocumento` (
   `IdDocumento` varchar(36) NOT NULL,
   `DataCriacao` datetime NOT NULL,
   `IdUsuarioCriacao` varchar(36) NOT NULL,
-  `IdStatusProcessamento` integer NOT NULL
+  `IdStatusProcessamento` integer NOT NULL,
+  `DataAlteracaoStatus` datetime NOT NULL
 );
 
 CREATE TABLE `StatusBaseConhecimentoDocumento` (
   `IdStatusBaseConhecimentoDocumento` integer PRIMARY KEY,
   `DescricaoStatusBaseConhecimentoDocumento` varchar(50)
+);
+
+CREATE TABLE `Notificacao` (
+  `IdNotificacao` integer PRIMARY KEY,
+  `IdUsuario` varcgar(36) NOT NULL,
+  `Mensagem` varchar(50) NOT NULL,
+  `DataCriacaoNotificacao` datetime NOT NULL,
+  `DataEntregaNotificacao` datetime,
+  `DataLeituraNotificacao` datetime
 );
 
 ALTER TABLE `ConfiguracoesEmpresa` ADD FOREIGN KEY (`IdEmpresa`) REFERENCES `Empresa` (`IdEmpresa`);
