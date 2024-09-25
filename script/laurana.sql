@@ -17,9 +17,9 @@ CREATE TABLE `ConfiguracoesEmpresa` (
   `HabilitaCriacaoAssistentePublico` bool NOT NULL,
   `HabilitaPastaEmpresa` bool NOT NULL,
   `HabilitaTokenOpenai` bool NOT NULL,
-  `OpenAiToken` varchar(70),
+  `OpenAiToken` varchar(250),
   `HabilitaTokenGemini` bool NOT NULL,
-  `GeminiToken` varchar(70),
+  `GeminiToken` varchar(250),
   `HabilitaAwsClaude` bool NOT NULL,
   `QuantidadeClaudeToken` integer
 );
@@ -95,6 +95,7 @@ CREATE TABLE `Documento` (
   `IdDiretorio` varchar(36) NOT NULL,
   `NomeDocumento` varchar(256) NOT NULL,
   `ExtensaoDocumento` varchar(10) NOT NULL,
+  `DataCadastro` datetime NOT NULL,
   `TamanhoDocumento` integer,
   `TextoDocumento` text(65535)
 );
@@ -104,16 +105,6 @@ CREATE TABLE `ImagemDocumento` (
   `IdDocumento` varchar(36) NOT NULL,
   `NomeImagem` varchar(256) NOT NULL,
   `TextoImagem` text(65535)
-);
-
-CREATE TABLE `RequisicaoOpenAi` (
-  `IdMensagem` varchar(36) PRIMARY KEY,
-  `IdUsuario` varchar(36) NOT NULL,
-  `DataRequisicao` datetime NOT NULL,
-  `QtdTokens` integer NOT NULL,
-  `Prompt` text NOT NULL,
-  `IdDocumento` varchar(36),
-  `StatusCodeOpenAi` integer
 );
 
 CREATE TABLE `MensagemDocumento` (
@@ -133,6 +124,7 @@ CREATE TABLE `Diretorio` (
   `IdProprietario` varchar(36) NOT NULL,
   `NomeDiretorio` varchar(20) NOT NULL,
   `AtivoDiretorio` bool NOT NULL,
+  `DataCadastro` datetime NOT NULL,
   `IdDiretorioPai` varchar(36)
 );
 
@@ -142,7 +134,8 @@ CREATE TABLE `AutomacaoDiretorio` (
   `IdDiretorioSaida` varchar(36) NOT NULL,
   `IdAssistente` varchar(36) NOT NULL,
   `Comando` text NOT NULL,
-  `AtivoAutomacao` bool NOT NULL
+  `AtivoAutomacao` bool NOT NULL,
+  `DataCadastro` datetime NOT NULL
 );
 
 CREATE TABLE `ExecucaoAutomacaoDiretorio` (
@@ -199,6 +192,24 @@ CREATE TABLE `Notificacao` (
   `DataLeituraNotificacao` datetime
 );
 
+CREATE TABLE `RecuperacaoSenhaEmpresa` (
+  `IdRecuperacao` varchar(36) PRIMARY KEY,
+  `IdEmpresa` varchar(36) NOT NULL,
+  `DataSolicitacao` datetime NOT NULL,
+  `TokenAutenticacao` varchar(250) NOT NULL,
+  `RecuperacaoAtiva` bool NOT NULL,
+  `RecuperacaoEfetivada` bool NOT NULL,
+  `DataEfetivacao` datetime
+);
+
+CREATE TABLE `LoginUsuario` (
+  `IdLogin` bigint PRIMARY KEY AUTO_INCREMENT,
+  `IdUsuario` varchar(36) NOT NULL,
+  `IdEmpresa` varchar(36) NOT NULL,
+  `DataLogin` datetime NOT NULL,
+  `Ip` varchar(20)
+);
+
 ALTER TABLE `ConfiguracoesEmpresa` ADD FOREIGN KEY (`IdEmpresa`) REFERENCES `Empresa` (`IdEmpresa`);
 
 ALTER TABLE `Usuario` ADD FOREIGN KEY (`IdEmpresa`) REFERENCES `Empresa` (`IdEmpresa`);
@@ -227,8 +238,6 @@ ALTER TABLE `Documento` ADD FOREIGN KEY (`IdDiretorio`) REFERENCES `Diretorio` (
 
 ALTER TABLE `ImagemDocumento` ADD FOREIGN KEY (`IdDocumento`) REFERENCES `Documento` (`IdDocumento`);
 
-ALTER TABLE `RequisicaoOpenAi` ADD FOREIGN KEY (`IdMensagem`) REFERENCES `Mensagem` (`IdMensagem`);
-
 ALTER TABLE `MensagemDocumento` ADD FOREIGN KEY (`IdMensagem`) REFERENCES `Mensagem` (`IdMensagem`);
 
 ALTER TABLE `MensagemDocumento` ADD FOREIGN KEY (`IdDocumento`) REFERENCES `Documento` (`IdDocumento`);
@@ -254,3 +263,11 @@ ALTER TABLE `BaseConhecimento` ADD FOREIGN KEY (`IdEscopoBaseConhecimento`) REFE
 ALTER TABLE `BaseConhecimentoDocumento` ADD FOREIGN KEY (`IdBaseConhecimento`) REFERENCES `BaseConhecimento` (`IdBaseConhecimento`);
 
 ALTER TABLE `BaseConhecimentoDocumento` ADD FOREIGN KEY (`IdDocumento`) REFERENCES `Documento` (`IdDocumento`);
+
+ALTER TABLE `BaseConhecimentoDocumento` ADD FOREIGN KEY (`IdStatusProcessamento`) REFERENCES `StatusBaseConhecimentoDocumento` (`IdStatusBaseConhecimentoDocumento`);
+
+ALTER TABLE `RecuperacaoSenhaEmpresa` ADD FOREIGN KEY (`IdEmpresa`) REFERENCES `Empresa` (`IdEmpresa`);
+
+ALTER TABLE `LoginUsuario` ADD FOREIGN KEY (`IdUsuario`) REFERENCES `Usuario` (`IdUsuario`);
+
+ALTER TABLE `LoginUsuario` ADD FOREIGN KEY (`IdEmpresa`) REFERENCES `Empresa` (`IdEmpresa`);

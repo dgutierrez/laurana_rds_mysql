@@ -1,0 +1,3 @@
+alter table Documento add DataCadastro datetime [not null]
+alter table Diretorio add DataCadastro datetime [not null]
+alter table AutomacaoDiretorio add DataCadastro datetime [not null]
