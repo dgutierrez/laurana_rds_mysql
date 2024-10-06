@@ -184,7 +184,7 @@ CREATE TABLE `StatusBaseConhecimentoDocumento` (
 );
 
 CREATE TABLE `Notificacao` (
-  `IdNotificacao` integer PRIMARY KEY,
+  `IdNotificacao` bigint PRIMARY KEY AUTO_INCREMENT,
   `IdUsuario` varchar(36) NOT NULL,
   `Mensagem` varchar(50) NOT NULL,
   `DataCriacaoNotificacao` datetime NOT NULL,
