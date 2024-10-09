@@ -39,7 +39,9 @@ CREATE TABLE `Usuario` (
 CREATE TABLE `ConfiguracoesUsuario` (
   `IdUsuario` varchar(36) PRIMARY KEY,
   `OpenAiToken` varchar(70),
-  `GeminiToken` varchar(70)
+  `GeminiToken` varchar(70),
+  `HabilitaIntimacoesAASP` bool NOT NULL,
+  `CodigoAASP` int
 );
 
 CREATE TABLE `Assistente` (
