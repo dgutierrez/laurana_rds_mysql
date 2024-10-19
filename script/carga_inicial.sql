@@ -30,3 +30,11 @@ values
 (2, 'Indexando'),
 (3, 'Finalizado'),
 (4, 'Erro');
+
+insert into StatusDocumento
+(IdStatusDocumento, DescricaoStatusDocumento)
+values
+(1, 'Criado'),
+(2, 'Indexando'),
+(3, 'Finalizado'),
+(4, 'Erro');

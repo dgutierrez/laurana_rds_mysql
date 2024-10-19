@@ -99,7 +99,13 @@ CREATE TABLE `Documento` (
   `ExtensaoDocumento` varchar(10) NOT NULL,
   `DataCadastro` datetime NOT NULL,
   `TamanhoDocumento` integer,
-  `TextoDocumento` text(65535)
+  `TextoDocumento` text(65535),
+  `IdStatusDocumento` integer
+);
+
+CREATE TABLE `StatusDocumento` (
+  `IdStatusDocumento` integer PRIMARY KEY,
+  `DescricaoStatusDocumento` varchar(50)
 );
 
 CREATE TABLE `ImagemDocumento` (
@@ -248,6 +254,8 @@ ALTER TABLE `Mensagem` ADD FOREIGN KEY (`IdChat`) REFERENCES `Chat` (`IdChat`);
 ALTER TABLE `Mensagem` ADD FOREIGN KEY (`IdTipoMensagem`) REFERENCES `TipoMensagem` (`IdTipoMensagem`);
 
 ALTER TABLE `Documento` ADD FOREIGN KEY (`IdDiretorio`) REFERENCES `Diretorio` (`IdDiretorio`);
+
+ALTER TABLE `Documento` ADD FOREIGN KEY (`IdStatusDocumento`) REFERENCES `StatusDocumento` (`IdStatusDocumento`);
 
 ALTER TABLE `ImagemDocumento` ADD FOREIGN KEY (`IdDocumento`) REFERENCES `Documento` (`IdDocumento`);
 
