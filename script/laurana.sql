@@ -20,8 +20,8 @@ CREATE TABLE `ConfiguracoesEmpresa` (
   `OpenAiToken` varchar(250),
   `HabilitaTokenGemini` bool NOT NULL,
   `GeminiToken` varchar(250),
-  `HabilitaAwsClaude` bool NOT NULL,
-  `QuantidadeClaudeToken` integer
+  `HabilitaTokenClaude` bool NOT NULL,
+  `ClaudeToken` varchar(250)
 );
 
 CREATE TABLE `Usuario` (
